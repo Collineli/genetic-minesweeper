@@ -104,34 +104,22 @@ def generations(n, w, h, num, generation):
 def mines_into_hex(w, h, mines):
     """
     this function is used to export the board into https://mzrg.com/js/mine/make_board.html
-    it's weird and maybe inefficient but it's fast enough for the task.
     """
-
-    mines = mines[:]
-
     out = f'{hex(w)[2:].zfill(2)} {hex(h)[2:].zfill(2)} '
 
     #mines count
     count = len(mines)
     count = hex(count)[2:].zfill(4)
-
     out += f'{count[0:2]} {count[2:]}'
 
-    #the site uses quite weird board representation so this is perhaps a lazy approach to convert.
-    board = gen_board(w, h, mines)
+    #convert every mine to the mzrg.com format
+    for mine in mines:
+        my_x = mine%w
+        my_y = mine//w
 
-    for x in range(w):
-        for y in range(h):
-            if board[y][x] == 'm':
-                drunk_index = x*h + y
+        a = hex(my_x)[2:].zfill(2)
+        b = hex(my_y)[2:].zfill(2)
 
-                a = drunk_index//h
-                b = drunk_index%h
-
-                a = hex(a)[2:].zfill(2)
-                b = hex(b)[2:].zfill(2)
-
-                out += f' {a} {b}'
+        out += f' {a} {b}'
         
-
     return out
